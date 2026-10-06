@@ -1,0 +1,45 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalEnv": ["NODE_ENV"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build", "prisma:generate"],
+      "outputs": ["dist/**"]
+    },
+    "prisma:generate": {
+      "outputs": ["src/generated/**"]
+    },
+    "prisma:migrate:deploy": {
+      "cache": false
+    },
+    "typecheck": {
+      "dependsOn": ["^build", "prisma:generate"],
+      "outputs": []
+    },
+    "lint": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["^build", "prisma:generate"],
+      "outputs": []
+    },
+    "test:integration": {
+      "dependsOn": ["^build", "prisma:generate"],
+      "cache": false
+    },
+    "test:contract": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
+    "test:e2e": {
+      "dependsOn": ["^build", "prisma:generate"],
+      "cache": false
+    }
+  }
+}

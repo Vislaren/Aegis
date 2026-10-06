@@ -1,0 +1,98 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgis/postgis:17-3.5
+        env:
+          POSTGRES_USER: aegis_superuser
+          POSTGRES_PASSWORD: ci_only_password
+          POSTGRES_DB: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U aegis_superuser" --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      TEST_POSTGRES_ADMIN_URL: postgresql://aegis_superuser:ci_only_password@localhost:5432/postgres
+      TURBO_TELEMETRY_DISABLED: '1'
+    steps:
+      # TODO(release gate): pin every action to a full commit SHA before production use.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - name: Generate Prisma clients
+        run: pnpm db:generate
+      - name: Build
+        run: pnpm build
+      - name: Type-check
+        run: pnpm typecheck
+      - name: Lint
+        run: pnpm lint
+      - name: Format check
+        run: pnpm format:check
+      - name: Unit and policy tests
+        run: pnpm test
+      # Also the migration check: every suite applies all reviewed migrations to a fresh database.
+      - name: Integration tests (real PostgreSQL)
+        run: pnpm test:integration
+      - name: Composed cross-service journey through the gateway
+        run: pnpm test:e2e
+      - name: OpenAPI is generated from contracts
+        run: pnpm openapi:export
+
+  security:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Secret scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: corepack enable
+      - name: Dependency audit (high and critical fail the build)
+        run: pnpm audit --audit-level high
+
+  images:
+    runs-on: ubuntu-24.04
+    needs: [verify]
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        service:
+          [api-gateway, identity-service, administration-service, audit-service, realtime-gateway]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -f infrastructure/docker/service.Dockerfile --build-arg SERVICE=${{ matrix.service }} -t aegis/${{ matrix.service }}:${{ github.sha }} .
+      - name: Scan image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: aegis/${{ matrix.service }}:${{ github.sha }}
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+          ignore-unfixed: true

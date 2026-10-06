@@ -1,0 +1,19 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+  - 'services/*'
+
+# Native builds that are allowed to run install scripts. Everything else is denied by default.
+onlyBuiltDependencies:
+  - '@prisma/engines'
+  - '@swc/core'
+  - 'esbuild'
+  - 'prisma'
+  - 'msgpackr-extract'
+
+# Only fetch native binaries for the machine running the install. Container builds run their own
+# install inside the image, so Linux binaries are fetched there.
+supportedArchitectures:
+  os: [current]
+  cpu: [current]
+  libc: [current]

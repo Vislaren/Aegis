@@ -1,0 +1,51 @@
+{
+  "name": "@aegis/identity-service",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Authentication, sessions, MFA, devices, consents, invitation delivery and redemption",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src test",
+    "dev": "tsc -p tsconfig.build.json && node --enable-source-maps --env-file-if-exists=.env dist/main.js",
+    "start": "node --enable-source-maps dist/main.js",
+    "start:worker": "node --enable-source-maps dist/worker.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate:deploy": "prisma migrate deploy",
+    "test": "vitest run --passWithNoTests",
+    "test:integration": "vitest run -c vitest.integration.config.mts --passWithNoTests",
+    "dev:worker": "node --enable-source-maps --env-file-if-exists=.env dist/worker.js",
+    "prisma:drift": "prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --script"
+  },
+  "dependencies": {
+    "@aegis/config": "workspace:*",
+    "@aegis/contracts": "workspace:*",
+    "@aegis/domain": "workspace:*",
+    "@aegis/observability": "workspace:*",
+    "@aegis/service-kit": "workspace:*",
+    "@fastify/cookie": "11.1.2",
+    "@fastify/rate-limit": "11.2.0",
+    "@nestjs/common": "12.1.2",
+    "@nestjs/core": "12.1.2",
+    "@nestjs/platform-fastify": "12.1.2",
+    "@prisma/adapter-pg": "7.10.0",
+    "@prisma/client": "7.10.0",
+    "fastify": "5.12.5",
+    "jose": "6.2.12",
+    "nodemailer": "10.0.15",
+    "otplib": "13.5.0",
+    "pg": "8.23.1",
+    "prisma": "7.10.0",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "12.1.2",
+    "@types/nodemailer": "8.0.2",
+    "@types/pg": "8.23.1",
+    "@types/supertest": "7.2.1",
+    "supertest": "7.3.1",
+    "tsx": "4.23.15"
+  }
+}

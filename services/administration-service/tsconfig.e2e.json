@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "../..",
+    "noEmit": true
+  },
+  "include": [
+    "test/e2e",
+    "src",
+    "../identity-service/src",
+    "../audit-service/src",
+    "../api-gateway/src"
+  ],
+  "exclude": []
+}

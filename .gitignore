@@ -1,0 +1,29 @@
+node_modules/
+dist/
+coverage/
+.turbo/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+infrastructure/docker/*.env
+*.log
+.DS_Store
+
+# Prisma generated client
+services/*/src/generated/
+
+# Expo
+apps/client/.expo/
+apps/client/web-build/
+apps/client/dist/
+apps/client/ios/
+apps/client/android/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Project-local tool shims (corepack)
+.tools/

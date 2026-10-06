@@ -1,0 +1,38 @@
+{
+  "name": "aegis",
+  "private": true,
+  "description": "Aegis school-transport safety platform (pnpm + Turborepo monorepo, microservice backend)",
+  "packageManager": "pnpm@10.28.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "test:integration": "turbo run test:integration --concurrency=1",
+    "test:contract": "turbo run test:contract",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "infra:up": "docker compose -f infrastructure/docker/docker-compose.yml up -d --wait",
+    "infra:down": "docker compose -f infrastructure/docker/docker-compose.yml down",
+    "stack:up": "docker compose -f infrastructure/docker/docker-compose.yml --profile services up -d --build --wait",
+    "db:generate": "turbo run prisma:generate",
+    "db:migrate": "turbo run prisma:migrate:deploy --concurrency=1",
+    "openapi:export": "pnpm --filter @aegis/api-gateway openapi:export",
+    "dev": "turbo run dev --parallel --filter=./services/*",
+    "dev:client": "pnpm --filter @aegis/client start",
+    "test:db": "node scripts/test-postgres.mjs",
+    "test:e2e": "turbo run test:e2e --concurrency=1"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.1",
+    "eslint": "10.12.0",
+    "prettier": "3.9.9",
+    "turbo": "2.11.7",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.1",
+    "vitest": "5.0.3"
+  }
+}

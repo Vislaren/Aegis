@@ -1,0 +1,5 @@
+# Keep LF everywhere (matches .editorconfig and Prettier endOfLine) regardless of core.autocrlf.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.ico binary

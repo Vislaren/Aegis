@@ -1,0 +1,11 @@
+node_modules
+dist
+coverage
+.turbo
+pnpm-lock.yaml
+apps/api/src/generated
+apps/client/.expo
+docs/api/openapi.json
+prisma/migrations/**/*.sql
+Aegis_AI_Build_Prompt.md
+Aegis_Project_Context.md

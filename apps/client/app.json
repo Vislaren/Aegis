@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "Aegis",
+    "slug": "aegis",
+    "scheme": "aegis",
+    "version": "0.1.0",
+    "orientation": "default",
+    "userInterfaceStyle": "light",
+    "platforms": ["ios", "android", "web"],
+    "web": { "bundler": "metro", "output": "single" },
+    "ios": {
+      "bundleIdentifier": "invalid.aegis.client",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "invalid.aegis.client",
+      "allowBackup": false
+    },
+    "plugins": ["expo-router", "expo-secure-store"],
+    "experiments": { "typedRoutes": true },
+    "extra": {
+      "apiBaseUrl": "http://localhost:3000"
+    }
+  }
+}

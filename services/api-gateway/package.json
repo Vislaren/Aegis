@@ -1,0 +1,43 @@
+{
+  "name": "@aegis/api-gateway",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Public /api/v1 edge: routing, rate limits, CORS, CSRF, correlation IDs. No business data.",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src",
+    "dev": "tsc -p tsconfig.build.json && node --enable-source-maps --env-file-if-exists=.env dist/main.js",
+    "start": "node --enable-source-maps dist/main.js",
+    "test": "vitest run --passWithNoTests",
+    "test:integration": "vitest run -c vitest.integration.config.mts --passWithNoTests",
+    "openapi:export": "node ../../scripts/export-openapi.mjs"
+  },
+  "dependencies": {
+    "@aegis/config": "workspace:*",
+    "@aegis/contracts": "workspace:*",
+    "@aegis/domain": "workspace:*",
+    "@aegis/observability": "workspace:*",
+    "@aegis/service-kit": "workspace:*",
+    "@asteasolutions/zod-to-openapi": "9.1.0",
+    "@fastify/cookie": "11.1.2",
+    "@fastify/cors": "11.3.0",
+    "@fastify/helmet": "13.1.1",
+    "@fastify/http-proxy": "11.6.4",
+    "@fastify/rate-limit": "11.2.0",
+    "@nestjs/common": "12.1.2",
+    "@nestjs/core": "12.1.2",
+    "@nestjs/platform-fastify": "12.1.2",
+    "fastify": "5.12.5",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "12.1.2",
+    "@types/pg": "8.23.1",
+    "@types/supertest": "7.2.1",
+    "supertest": "7.3.1",
+    "tsx": "4.23.15"
+  }
+}
